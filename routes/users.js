@@ -5,6 +5,7 @@ var config = require("../config");
 var User = require('../models/User');
 var bluebird = require('bluebird');
 var jwt= require('jsonwebtoken');
+var cors = require('cors');
 //var mailData =require('../models/emailTemplate')
 var expressvalidator = require('express-validator');
 var error = require('../error');
