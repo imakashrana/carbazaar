@@ -9,7 +9,7 @@ validator.isEmail('foo@bar.com');
 var User = require('../models/User');
 var Data = require('../models/local');
 var multer = require('multer');
-
+var cors = require('cors');
 
 var storage = multer.diskStorage({
 destination:'../angular/carbazaar/src/assets/uploads',
