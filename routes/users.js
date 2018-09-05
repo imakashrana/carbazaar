@@ -16,12 +16,7 @@ var path = require('path');
 var templatesDir = path.resolve(__dirname, '../templates');
 
 router.route('/adduser').post(function (req, res) {
-///Start check Email is registered or not
-  User.findOne({ "email": req.body.email }, function (err, user) {
-    //console.log(user.email);
-    console.log(req.body.email);
-    if (!user) {
-      console.log(user);
+
       const newUser = new User({
         "firstname": req.body.firstname,
         "lastname": req.body.lastname,
@@ -35,53 +30,19 @@ router.route('/adduser').post(function (req, res) {
       var currentDate = new Date();
       newUser.created_at = currentDate;
       newUser.updated_at = currentDate;
-console.log(req.body.email)
-      console.log('email not Exists: ', req.body.email);
-      newUser.save(function (err, user) {
-        if (err) return res.send({ "status": "Error", "message": err });
-       if(!err){
-        // Email code
-        var api_key = 'd0040a59c4adc468820f340d2d68b302-f45b080f-55640388';
-        var domain = 'demomail.customerdemourl.com';
-        var mailgun = require('mailgun-js')({apiKey: api_key, domain: domain});
-          var template = new EmailTemplate(path.join(templatesDir, 'register'));
-    var locals = {
-      firstName: req.body.firstname,
-      lastName:  req.body.lastname,
-      email: req.body.email
-    };
-    template.render(locals, function (err, results){
-      if (err) {
-          return console.error(err);
-      }
-      mailData = {
-       from : 'CarBaazar<postmaster@demomail.customerdemourl.com>',
-        to : req.body.email,
-        subject : results.subject,
-        text : results.text,
-        html : results.html
-        }
- // var smtpProtocol = smtp.smtpTransport;
-          mailgun.messages().send(mailData, function (err, info) {
-          // smtpProtocol.sendMail(mailData, function(error, info){
-      if (err) {
-        res.send({ "status": "Error", "message": err });
-      } else {
-        return res.send({ "status": "Success", "message": "Data Inserted", "users": user });
-      }
-    }); 
-  });
-       }
-      });
 
-    } else {
-      console.log('email Exists: ', req.body.email);
-      return res.send({ "message": error.emailregistered });
-    }
-    //END check Email is registered or not
+     newUser.save(function (err, user) {
+      try{
+        if (err) return res.send({ "status": "Error", "message":err });
+        return res.send({ "status": "Success", "message": "Car Instered", "cars": user });
+      }
+      catch (err) {
+        res.send({ "status": "Error", "message": err });
+        throw err
+      }
+    });
   });
-});
-// get total users
+});// get total users
 router.route('/getalluser/total').get(function (req, res) {
   User.find(function (err, user) {
     if (err)
