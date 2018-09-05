@@ -15,7 +15,6 @@ var EmailTemplate = require('email-templates').EmailTemplate;
 var path = require('path');
 var templatesDir = path.resolve(__dirname, '../templates');
 
-//save/POST data in database
 router.route('/adduser').post(function (req, res) {
 ///Start check Email is registered or not
   User.findOne({ "email": req.body.email }, function (err, user) {
@@ -41,7 +40,10 @@ console.log(req.body.email)
       newUser.save(function (err, user) {
         if (err) return res.send({ "status": "Error", "message": err });
        if(!err){
-        
+        // Email code
+        var api_key = 'd0040a59c4adc468820f340d2d68b302-f45b080f-55640388';
+        var domain = 'demomail.customerdemourl.com';
+        var mailgun = require('mailgun-js')({apiKey: api_key, domain: domain});
           var template = new EmailTemplate(path.join(templatesDir, 'register'));
     var locals = {
       firstName: req.body.firstname,
@@ -53,17 +55,17 @@ console.log(req.body.email)
           return console.error(err);
       }
       mailData = {
-        From : 'test@gmail.com',
+       from : 'CarBaazar<postmaster@demomail.customerdemourl.com>',
         to : req.body.email,
         subject : results.subject,
         text : results.text,
         html : results.html
         }
-     var smtpProtocol = smtp.smtpTransport;
-     smtpProtocol.sendMail(mailData, function(error, info){
-       
-      if (error) {
-        res.send({ "status": "Error", "message": error });
+ // var smtpProtocol = smtp.smtpTransport;
+          mailgun.messages().send(mailData, function (err, info) {
+          // smtpProtocol.sendMail(mailData, function(error, info){
+      if (err) {
+        res.send({ "status": "Error", "message": err });
       } else {
         return res.send({ "status": "Success", "message": "Data Inserted", "users": user });
       }
@@ -79,7 +81,6 @@ console.log(req.body.email)
     //END check Email is registered or not
   });
 });
-
 // get total users
 router.route('/getalluser/total').get(function (req, res) {
   User.find(function (err, user) {
