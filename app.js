@@ -23,7 +23,13 @@ var localRouter = require('./routes/local');
 var app = express();
 
 // view engine setup
-app.use(cors());
+app.use(cors({
+'allowedHeaders': ['sessionId', 'Content-Type'],
+'exposedHeaders': ['sessionId'],
+'origin': '*',
+'methods': 'GET,HEAD,PUT,PATCH,POST,DELETE',
+'preflightContinue': false
+}));
 app.use(expressValidator());
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
