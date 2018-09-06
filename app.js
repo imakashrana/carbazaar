@@ -19,7 +19,7 @@ mongoose.connect(config.database)
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var localRouter = require('./routes/local');
-//var carRouter = require('./routes/car');
+var carRouter = require('./routes/car');
 var app = express();
 
 // view engine setup
@@ -61,7 +61,7 @@ app.use(function(err, req, res, next) {
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
   // render the error page
-  res.status(err.status || 500);
+  res.status(err.status || 500); 
   res.render('error');
 });
 
