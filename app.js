@@ -19,7 +19,7 @@ mongoose.connect(config.database)
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var localRouter = require('./routes/local');
-var carRouter = require('./routes/car');
+//var carRouter = require('./routes/car');
 var app = express();
 
 // view engine setup
