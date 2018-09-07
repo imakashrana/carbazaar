@@ -34,7 +34,7 @@ router.route('/adduser').post(function (req, res) {
      newUser.save(function (err, user) {
       try{
         if (err) return res.send({ "status": "Error", "message":err });
-        return res.send({ "status": "Success", "message": "Car Instered", "cars": user });
+        return res.send({ "status": "Success", "message": "user Instered", "users": user });
       }
       catch (err) {
         res.send({ "status": "Error", "message": err });
